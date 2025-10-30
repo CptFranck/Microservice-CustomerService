@@ -17,7 +17,6 @@ import lombok.Setter;
 @Table(name = "customer")
 public class CustomerEntity {
 
-
     @Id
     private Long id;
 
