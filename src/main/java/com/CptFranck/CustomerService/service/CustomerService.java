@@ -2,6 +2,7 @@ package com.CptFranck.CustomerService.service;
 
 import com.CptFranck.CustomerService.entity.CustomerEntity;
 import com.CptFranck.CustomerService.repository.CustomerRepository;
+import com.CptFranck.dto.CustomerDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -15,29 +16,49 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
-    public CustomerEntity create(Long keycloakId, String name, String email) {
+    public CustomerDto create(Long keycloakId, String name, String email) {
         if (customerRepository.existsById(keycloakId))
             throw new IllegalArgumentException("Customer already exists with id: " + keycloakId);
 
         CustomerEntity customer = new CustomerEntity(keycloakId, name, email, "");
+        customer = customerRepository.save(customer);
 
-        return customerRepository.save(customer);
+        return CustomerDto.builder()
+                .id(Long.valueOf(String.valueOf(customer.getId())))
+                .username(customer.getName())
+                .email(customer.getEmail())
+                .address(customer.getAddress())
+                .build();
     }
 
-    public CustomerEntity update(Long keycloakId, String name, String email, String address) {
+    public CustomerDto update(Long keycloakId, String name, String email, String address) {
         CustomerEntity customer = customerRepository.findById(keycloakId)
                 .orElseThrow(() -> new IllegalArgumentException("Customer not found with id: " + keycloakId));
 
         customer.setName(name);
         customer.setEmail(email);
         customer.setAddress(address);
-        return customerRepository.save(customer);
+
+        customer = customerRepository.save(customer);
+
+        return CustomerDto.builder()
+                .id(Long.valueOf(String.valueOf(customer.getId())))
+                .username(customer.getName())
+                .email(customer.getEmail())
+                .address(customer.getAddress())
+                .build();
     }
 
-    public void deleteCustomer(Long keycloakId) {
+    public CustomerDto delete(Long keycloakId) {
         CustomerEntity customer = customerRepository.findById(keycloakId)
                 .orElseThrow(() -> new IllegalArgumentException("Customer not found with id: " + keycloakId));
         customerRepository.delete(customer);
+        return CustomerDto.builder()
+                .id(Long.valueOf(String.valueOf(customer.getId())))
+                .username(customer.getName())
+                .email(customer.getEmail())
+                .address(customer.getAddress())
+                .build();
     }
 
 //    public CustomerResponse getOrCreateUser(JwtAuthenticationToken auth) {
