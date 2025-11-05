@@ -3,10 +3,12 @@ package com.CptFranck.CustomerService.controller;
 import com.CptFranck.CustomerService.service.CustomerService;
 import com.CptFranck.dto.CustomerDto;
 import com.CptFranck.dto.KeycloakUserDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("api/v1")
 public class CustomerController {
@@ -19,41 +21,33 @@ public class CustomerController {
 
     @PostMapping(consumes = "application/json", produces = "application/json", path = "/customers")
     public ResponseEntity<CustomerDto> createCustomer(@RequestBody KeycloakUserDto request) {
-        try {
-            CustomerDto customer = customerService.create(
-                    Long.valueOf(request.getKeycloakId()),
-                    request.getUsername(),
-                    request.getEmail()
-            );
-            return ResponseEntity.status(HttpStatus.CREATED).body(customer);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
-        }
+        log.info("Create customer: {}", request);
+
+        CustomerDto customer = customerService.create(
+                request.getKeycloakId(),
+                request.getUsername(),
+                request.getEmail());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(customer);
     }
 
     @PutMapping(consumes = "application/json",produces = "application/json", path = "/customers")
     public ResponseEntity<CustomerDto> updateCustomer(@RequestBody CustomerDto customerDto) {
-        try {
+        log.info("Update customer: {}", customerDto);
             CustomerDto customer = customerService.update(
                     customerDto.getId(),
                     customerDto.getUsername(),
                     customerDto.getEmail(),
-                    customerDto.getAddress()
-            );
-            return ResponseEntity.ok(customer);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+                    customerDto.getAddress());
+
+        return ResponseEntity.ok(customer);
     }
 
     @DeleteMapping("/{keycloakId}")
-    public ResponseEntity<CustomerDto> deleteCustomer(@PathVariable Long keycloakId) {
-        try {
-            CustomerDto customer = customerService.delete(keycloakId);
-            return ResponseEntity.ok(customer);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<CustomerDto> deleteCustomer(@PathVariable String keycloakId) {
+        log.info("Delete customer: {}", keycloakId);
+        CustomerDto customer = customerService.delete(keycloakId);
+        return ResponseEntity.ok(customer);
     }
 //    @GetMapping("/me")
 //    public UserInfoDto getGretting(JwtAuthenticationToken auth) {
