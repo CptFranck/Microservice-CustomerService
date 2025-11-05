@@ -16,7 +16,7 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
-    public CustomerDto create(Long keycloakId, String name, String email) {
+    public CustomerDto create(String keycloakId, String name, String email) {
         if (customerRepository.existsById(keycloakId))
             throw new IllegalArgumentException("Customer already exists with id: " + keycloakId);
 
@@ -24,14 +24,14 @@ public class CustomerService {
         customer = customerRepository.save(customer);
 
         return CustomerDto.builder()
-                .id(Long.valueOf(String.valueOf(customer.getId())))
+                .id(customer.getId())
                 .username(customer.getName())
                 .email(customer.getEmail())
                 .address(customer.getAddress())
                 .build();
     }
 
-    public CustomerDto update(Long keycloakId, String name, String email, String address) {
+    public CustomerDto update(String keycloakId, String name, String email, String address) {
         CustomerEntity customer = customerRepository.findById(keycloakId)
                 .orElseThrow(() -> new IllegalArgumentException("Customer not found with id: " + keycloakId));
 
@@ -42,19 +42,19 @@ public class CustomerService {
         customer = customerRepository.save(customer);
 
         return CustomerDto.builder()
-                .id(Long.valueOf(String.valueOf(customer.getId())))
+                .id(customer.getId())
                 .username(customer.getName())
                 .email(customer.getEmail())
                 .address(customer.getAddress())
                 .build();
     }
 
-    public CustomerDto delete(Long keycloakId) {
+    public CustomerDto delete(String keycloakId) {
         CustomerEntity customer = customerRepository.findById(keycloakId)
                 .orElseThrow(() -> new IllegalArgumentException("Customer not found with id: " + keycloakId));
         customerRepository.delete(customer);
         return CustomerDto.builder()
-                .id(Long.valueOf(String.valueOf(customer.getId())))
+                .id(customer.getId())
                 .username(customer.getName())
                 .email(customer.getEmail())
                 .address(customer.getAddress())
