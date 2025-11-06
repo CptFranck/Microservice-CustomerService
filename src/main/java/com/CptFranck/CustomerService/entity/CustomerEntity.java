@@ -20,11 +20,17 @@ public class CustomerEntity {
     @Id
     private String id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "username")
+    private String username;
 
     @Column(name = "email")
     private String email;
+
+    @Column(name = "first_name")
+    private String firstname;
+
+    @Column(name = "last_name")
+    private String lastname;
 
     @Column(name = "address")
     private String address;
