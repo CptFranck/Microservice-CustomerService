@@ -16,34 +16,37 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
-    public CustomerDto create(String keycloakId, String name, String email) {
+    public CustomerDto createFromKeycloakEvent(String keycloakId, String username, String email, String firstname, String lastname) {
         if (customerRepository.existsById(keycloakId))
             throw new IllegalArgumentException("Customer already exists with id: " + keycloakId);
 
-        CustomerEntity customer = new CustomerEntity(keycloakId, name, email, "");
+        CustomerEntity customer = new CustomerEntity(keycloakId, username, email, firstname, lastname, "");
         customer = customerRepository.save(customer);
 
         return CustomerDto.builder()
                 .id(customer.getId())
-                .username(customer.getName())
+                .username(customer.getUsername())
                 .email(customer.getEmail())
+                .firstname(customer.getUsername())
+                .lastname(customer.getUsername())
                 .address(customer.getAddress())
                 .build();
     }
 
-    public CustomerDto update(String keycloakId, String name, String email, String address) {
+    public CustomerDto updateFromKeycloakEvent(String keycloakId, String name, String email, String firstname, String lastname) {
         CustomerEntity customer = customerRepository.findById(keycloakId)
                 .orElseThrow(() -> new IllegalArgumentException("Customer not found with id: " + keycloakId));
 
-        customer.setName(name);
+        customer.setUsername(name);
         customer.setEmail(email);
-        customer.setAddress(address);
+        customer.setFirstname(firstname);
+        customer.setLastname(lastname);
 
         customer = customerRepository.save(customer);
 
         return CustomerDto.builder()
                 .id(customer.getId())
-                .username(customer.getName())
+                .username(customer.getUsername())
                 .email(customer.getEmail())
                 .address(customer.getAddress())
                 .build();
@@ -55,7 +58,7 @@ public class CustomerService {
         customerRepository.delete(customer);
         return CustomerDto.builder()
                 .id(customer.getId())
-                .username(customer.getName())
+                .username(customer.getUsername())
                 .email(customer.getEmail())
                 .address(customer.getAddress())
                 .build();
