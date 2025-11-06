@@ -20,31 +20,34 @@ public class CustomerController {
     }
 
     @PostMapping(consumes = "application/json", produces = "application/json", path = "/customers")
-    public ResponseEntity<CustomerDto> createCustomer(@RequestBody KeycloakUserDto request) {
+    public ResponseEntity<CustomerDto> createCustomerFromKeycloakEvent(@RequestBody KeycloakUserDto request) {
         log.info("Create customer: {}", request);
 
-        CustomerDto customer = customerService.create(
+        CustomerDto customer = customerService.createFromKeycloakUser(
                 request.getKeycloakId(),
                 request.getUsername(),
-                request.getEmail());
+                request.getEmail(),
+                request.getFirstname(),
+                request.getLastname());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(customer);
     }
 
     @PutMapping(consumes = "application/json",produces = "application/json", path = "/customers")
-    public ResponseEntity<CustomerDto> updateCustomer(@RequestBody CustomerDto customerDto) {
+    public ResponseEntity<CustomerDto> updateCustomerFromKeycloakEvent(@RequestBody CustomerDto customerDto) {
         log.info("Update customer: {}", customerDto);
-            CustomerDto customer = customerService.update(
+            CustomerDto customer = customerService.updateFromKeycloakUser(
                     customerDto.getId(),
                     customerDto.getUsername(),
                     customerDto.getEmail(),
-                    customerDto.getAddress());
+                    customerDto.getFirstname(),
+                    customerDto.getLastname());
 
         return ResponseEntity.ok(customer);
     }
 
     @DeleteMapping("/{keycloakId}")
-    public ResponseEntity<CustomerDto> deleteCustomer(@PathVariable String keycloakId) {
+    public ResponseEntity<CustomerDto> deleteCustomerFromKeycloakEvent(@PathVariable String keycloakId) {
         log.info("Delete customer: {}", keycloakId);
         CustomerDto customer = customerService.delete(keycloakId);
         return ResponseEntity.ok(customer);
