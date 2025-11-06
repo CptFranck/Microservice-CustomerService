@@ -16,7 +16,7 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
-    public CustomerDto createFromKeycloakEvent(String keycloakId, String username, String email, String firstname, String lastname) {
+    public CustomerDto createFromKeycloakUser(String keycloakId, String username, String email, String firstname, String lastname) {
         if (customerRepository.existsById(keycloakId))
             throw new IllegalArgumentException("Customer already exists with id: " + keycloakId);
 
@@ -33,11 +33,11 @@ public class CustomerService {
                 .build();
     }
 
-    public CustomerDto updateFromKeycloakEvent(String keycloakId, String name, String email, String firstname, String lastname) {
+    public CustomerDto updateFromKeycloakUser(String keycloakId, String username, String email, String firstname, String lastname) {
         CustomerEntity customer = customerRepository.findById(keycloakId)
                 .orElseThrow(() -> new IllegalArgumentException("Customer not found with id: " + keycloakId));
 
-        customer.setUsername(name);
+        customer.setUsername(username);
         customer.setEmail(email);
         customer.setFirstname(firstname);
         customer.setLastname(lastname);
