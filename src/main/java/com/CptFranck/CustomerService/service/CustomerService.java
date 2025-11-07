@@ -27,8 +27,8 @@ public class CustomerService {
                 .id(customer.getId())
                 .username(customer.getUsername())
                 .email(customer.getEmail())
-                .firstname(customer.getUsername())
-                .lastname(customer.getUsername())
+                .firstname(customer.getFirstname())
+                .lastname(customer.getLastname())
                 .address(customer.getAddress())
                 .build();
     }
