@@ -48,6 +48,8 @@ public class CustomerService {
                 .id(customer.getId())
                 .username(customer.getUsername())
                 .email(customer.getEmail())
+                .firstname(customer.getFirstname())
+                .lastname(customer.getLastname())
                 .address(customer.getAddress())
                 .build();
     }
@@ -60,6 +62,8 @@ public class CustomerService {
                 .id(customer.getId())
                 .username(customer.getUsername())
                 .email(customer.getEmail())
+                .firstname(customer.getFirstname())
+                .lastname(customer.getLastname())
                 .address(customer.getAddress())
                 .build();
     }
