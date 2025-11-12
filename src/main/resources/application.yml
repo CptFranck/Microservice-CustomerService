@@ -19,6 +19,18 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
+keycloak:
+  auth-server-url: http://localhost:8091/auth
+  realm: ticketing-security-realm
+  resource: admin-cli
+  credentials:
+    secret: 7OG9c3igAtRjCRnRbyjCdSRXgljsqgYY
+  scheduled:
+    mapping:
+      initialDelay: 10000 # 10s
+      fixedRate: 86 400 000 # 24h
+
+
 server:
   port: 8086
 
