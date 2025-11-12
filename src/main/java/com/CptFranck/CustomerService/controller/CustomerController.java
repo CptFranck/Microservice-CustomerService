@@ -19,7 +19,7 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @PostMapping(consumes = "application/json", produces = "application/json", path = "/customers")
+    @PostMapping(consumes = "application/json", produces = "application/json", path = "/keycloak-event/new-customer")
     public ResponseEntity<CustomerDto> createCustomerFromKeycloakEvent(@RequestBody KeycloakUserDto request) {
         log.info("Create customer: {}", request);
 
@@ -33,8 +33,21 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.CREATED).body(customer);
     }
 
+    @PutMapping(consumes = "application/json",produces = "application/json", path = "/keycloak-event/update-customer")
+    public ResponseEntity<CustomerDto> updateCustomerFromKeycloakEvent(@RequestBody KeycloakUserDto keycloakUserDto) {
+        log.info("Update customer: {}", keycloakUserDto);
+        CustomerDto customer = customerService.updateFromKeycloakUser(
+                keycloakUserDto.getKeycloakId(),
+                keycloakUserDto.getUsername(),
+                keycloakUserDto.getEmail(),
+                keycloakUserDto.getFirstname(),
+                keycloakUserDto.getLastname());
+
+        return ResponseEntity.ok(customer);
+    }
+
     @PutMapping(consumes = "application/json",produces = "application/json", path = "/customers")
-    public ResponseEntity<CustomerDto> updateCustomerFromKeycloakEvent(@RequestBody CustomerDto customerDto) {
+    public ResponseEntity<CustomerDto> updateCustomerFromUserRequest(@RequestBody CustomerDto customerDto) {
         log.info("Update customer: {}", customerDto);
             CustomerDto customer = customerService.updateFromKeycloakUser(
                     customerDto.getId(),
@@ -46,7 +59,7 @@ public class CustomerController {
         return ResponseEntity.ok(customer);
     }
 
-    @DeleteMapping("/{keycloakId}")
+    @DeleteMapping("/keycloak-event/delete-customer/{keycloakId}")
     public ResponseEntity<CustomerDto> deleteCustomerFromKeycloakEvent(@PathVariable String keycloakId) {
         log.info("Delete customer: {}", keycloakId);
         CustomerDto customer = customerService.delete(keycloakId);
