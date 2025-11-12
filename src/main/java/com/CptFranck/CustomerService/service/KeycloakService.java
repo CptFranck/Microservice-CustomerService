@@ -1,6 +1,7 @@
 package com.CptFranck.CustomerService.service;
 
 import lombok.RequiredArgsConstructor;
+import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -30,7 +31,7 @@ public class KeycloakService {
                 .realm(realm)
                 .clientId(clientId)
                 .clientSecret(clientSecret)
-                .grantType("client_credentials")
+                .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
                 .build();
     }
 
