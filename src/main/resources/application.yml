@@ -2,6 +2,14 @@ spring:
   application:
     name: CustomerService
 
+  # Keycloak
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8091/realms/ticketing-security-realm
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+
   # MySQL
   datasource:
     url: jdbc:mysql://localhost:3306/ticketing
@@ -19,6 +27,10 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
+server:
+  port: 8086
+
+# Keycloak variable
 keycloak:
   auth-server-url: http://localhost:8091/auth
   realm: ticketing-security-realm
@@ -29,10 +41,11 @@ keycloak:
     mapping:
       initialDelay: 10000 # 10s
       fixedRate: 86 400 000 # 24h
+  auth:
+    converter:
+      ressource-id: ticketing-security-realm
+      principal-attribute: preferred_username
 
-
-server:
-  port: 8086
 
 #OpenAPI
 springdoc:
