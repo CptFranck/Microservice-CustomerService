@@ -40,7 +40,7 @@ keycloak:
   scheduled:
     mapping:
       initialDelay: 10000 # 10s
-      fixedRate: 86 400 000 # 24h
+      fixedRate: 86400000 # 24h
   auth:
     converter:
       ressource-id: ticketing-security-realm
