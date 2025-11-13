@@ -20,6 +20,6 @@ public class KeycloakService {
     }
 
     public List<UserRepresentation> getAllUsers() {
-         return keycloakAdminClient.realm(realm).users().list();
+        return keycloakAdminClient.realm(realm).users().list();
     }
 }
