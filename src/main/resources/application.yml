@@ -32,14 +32,14 @@ server:
 
 # Keycloak variable
 keycloak:
-  auth-server-url: http://localhost:8091/auth
+  auth-server-url: http://localhost:8091
   realm: ticketing-security-realm
   resource: admin-cli
   credentials:
     secret: 7OG9c3igAtRjCRnRbyjCdSRXgljsqgYY
   scheduled:
     mapping:
-      initialDelay: 10000 # 10s
+      initialDelay: 1 # 10s
       fixedRate: 86400000 # 24h
   auth:
     converter:
